@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/board.css" />
+        <script type="text/javascript" src="js/shogi.js"></script>
+    </head>
+    <body>
+        <div>
+            <div id="boardX" class="square"/>
+            <textarea class="textar" name="description"></textarea>
+        </div>
+
+        <script>
+            var board = new ShogiBoard("boardX");
+            board.initCSS();
+            board.initBoard();
+            board.initFigures();
+        </script>
+    </body>
+</html>
