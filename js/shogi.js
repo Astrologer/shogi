@@ -1,6 +1,6 @@
-
 function ShogiBoard(boardId) {
     this.boardId = boardId;
+    this.sfen = new Sfen();
 
     this.initCSS = function() {
         var i, j;
@@ -66,12 +66,20 @@ function ShogiBoard(boardId) {
 
         var board = document.getElementById(this.boardId);
         var cell = document.createElement("div");
+        var i;
+        var position;
 
-        cell.classList.add(`cell34`);
-        cell.position = `cell34`;
-        cell.classList.add(`item`);
-        cell.innerHTML = "歩";
-        cell.onclick = (function (a,b) { return function () { activateHandler(a, b); }}) (cell, this.boardId)
-        board.appendChild(cell);
+        var pieces = this.sfen.parse("lnsgk2nl/1r4gs1/p1pppp1pp/1p4p2/7P1/2P6/PP1PPPP1P/1SG4R1/LN2KGSNL b Bb");
+        for (i = 0; i < pieces.length; i++) {
+            cell = document.createElement("div");
+            position = `cell${pieces[i].x}${pieces[i].y}`;
+            cell.position = position;
+            cell.classList.add(`item`);
+            cell.classList.add(position);
+            cell.innerHTML = pieces[i].name;
+            cell.style.transform = pieces[i].transform;
+            cell.onclick = (function (a,b) { return function () { activateHandler(a, b); }}) (cell, this.boardId)
+            board.appendChild(cell);
+        }
     }
 }
