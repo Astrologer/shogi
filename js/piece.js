@@ -21,8 +21,17 @@ function Piece(type, x, y) {
     this.name = names[type];
     this.x = x;
     this.y = y;
-    this.transform = "";
-    if (type.search(/^[PLNSGBRK]$/)) {
-        this.transform = 'rotate(180deg)';
+    this.transform = (type.search(/^[plnsgbrk]$/) >= 0) ? 'rotate(180deg)' : '';
+    this._html = document.createElement("div");
+
+    var position = `cell${x}${y}`;
+    this._html.position = position;
+    this._html.classList.add("item");
+    this._html.classList.add(position);
+    this._html.innerHTML = this.name;
+    this._html.style.transform = this.transform;
+
+    this.toHTML = function() {
+        return this._html;
     }
 }

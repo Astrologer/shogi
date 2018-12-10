@@ -1,6 +1,9 @@
 function ShogiBoard(boardId) {
     this.boardId = boardId;
     this.sfen = new Sfen();
+    this.board = {};
+    this.blackHands = {};
+    this.whiteHands = {};
 
     this.initCSS = function() {
         var i, j;
@@ -17,22 +20,22 @@ function ShogiBoard(boardId) {
         }
     }
 
-    this.initBoard = function() {
-        function moveHandler(item, boardId) {
-            var board = document.getElementById(boardId);
-            console.log("try to move");
-            console.log(item.position);
-            if ("active" in board) {
-                console.log( board.active.position);
-                board.active.classList.replace(board.active.position, item.position);
-                board.active.position = item.position;
-                delete board.active;
-            }
+    this.moveHandler = function(item, boardId) {
+        var board = document.getElementById(boardId);
+        console.log("try to move");
+        console.log(item.position);
+        if ("active" in board) {
+            console.log( board.active.position);
+            board.active.classList.replace(board.active.position, item.position);
+            board.active.position = item.position;
+            delete board.active;
         }
+    }
 
-        var i, j;
-        var cell;
+    this.initBoard = function() {
+        var self = this;
         var board = document.getElementById(this.boardId);
+        var i, j, cell;
 
         for (i = 1; i < 10; i++) {
             for (j = 1; j < 10; j++) {
@@ -40,7 +43,7 @@ function ShogiBoard(boardId) {
                 cell.classList.add("cell");
                 cell.classList.add(`cell${i}${j}`);
                 cell.position = `cell${i}${j}`;
-                cell.onclick = (function (a,b) { return function () { moveHandler(a, b); }}) (cell, this.boardId)
+                cell.onclick = (function (a,b) { return function () { self.moveHandler(a, b); }}) (cell, this.boardId)
                 board.appendChild(cell);
             }
         }
@@ -55,31 +58,25 @@ function ShogiBoard(boardId) {
         }
     }
 
-    this.initFigures = function() {
-        function activateHandler(item, boardId) {
-            var board = document.getElementById(boardId);
-            console.log("pushed");
-            console.log(item.position);
-            if ("active" in board) {}
-            else board.active = item
-        }
+    this.activateHandler = function (item, boardId) {
+        var board = document.getElementById(boardId);
+        console.log("pushed");
+        console.log(item.position);
+        if ("active" in board) {}
+        else board.active = item
+    }
 
+    this.initFigures = function() {
         var board = document.getElementById(this.boardId);
-        var cell = document.createElement("div");
-        var i;
-        var position;
+        var self = this;
+
+        var position, i;
 
         var pieces = this.sfen.parse("lnsgk2nl/1r4gs1/p1pppp1pp/1p4p2/7P1/2P6/PP1PPPP1P/1SG4R1/LN2KGSNL b Bb");
         for (i = 0; i < pieces.length; i++) {
-            cell = document.createElement("div");
-            position = `cell${pieces[i].x}${pieces[i].y}`;
-            cell.position = position;
-            cell.classList.add(`item`);
-            cell.classList.add(position);
-            cell.innerHTML = pieces[i].name;
-            cell.style.transform = pieces[i].transform;
-            cell.onclick = (function (a,b) { return function () { activateHandler(a, b); }}) (cell, this.boardId)
-            board.appendChild(cell);
+            var html = pieces[i].toHTML();
+            html.onclick = (function (a,b) { return function () { self.activateHandler(a, b); }}) (html, this.boardId)
+            board.appendChild(html);
         }
     }
 }
