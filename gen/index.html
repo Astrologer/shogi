@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="/css/board.css" />
+        <script type="text/javascript" src="/js/shogi.js?version=3"></script>
+        <script type="text/javascript" src="/js/sfen.js?version=3"></script>
+        <script type="text/javascript" src="/js/piece.js?version=3"></script>
+    </head>
+    <body>
+        <script>
+            var query = location.search.substr(1);
+            var result = {};
+            query.split("&").forEach(function(part) {
+                var item = part.split("=");
+                result[item[0]] = decodeURIComponent(item[1]);
+            });
+            var sfen = result.sfen || "oops";
+
+            console.log(sfen);
+
+            var board = new ShogiBoard();
+            board.initCSS();
+            board.initBoard();
+            board.initFigures();
+
+            const {body} = document;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.height = 600;
+
+            const tempImg = document.createElement('img');
+            tempImg.addEventListener('load', onTempImageLoad);
+
+            const targetImg = document.createElement('img')
+            function onTempImageLoad(e){
+                ctx.drawImage(e.target, 0, 0);
+                targetImg.src = canvas.toDataURL();
+            }
+
+            fetch("/css/pack.css").then(r => r.text()).then(function(textStyle) {
+                var htmlContent = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"> <foreignObject width="100%" height="100%"> <div xmlns="http://www.w3.org/1999/xhtml"> <style>${textStyle}</style> ${board.board.outerHTML} </div></foreignObject> </svg>`;
+                tempImg.src = 'data:image/svg+xml,' + encodeURIComponent(htmlContent);
+                body.appendChild(targetImg);
+                //body.appendChild(tempImg);
+            });
+
+        </script>
+    </body>
+</html>

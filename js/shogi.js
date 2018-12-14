@@ -1,7 +1,11 @@
 function ShogiBoard(boardId) {
-    this.boardId = boardId;
+    if (boardId === undefined) {
+        this.board = document.createElement("div");
+        this.board.classList.add("square");
+    } else {
+        this.board = document.getElementById(boardId);
+    }
     this.sfen = new Sfen();
-    this.board = {};
     this.blackHands = {};
     this.whiteHands = {};
 
@@ -20,8 +24,8 @@ function ShogiBoard(boardId) {
         }
     }
 
-    this.moveHandler = function(item, boardId) {
-        var board = document.getElementById(boardId);
+    this.moveHandler = function(self, item) {
+        var board = self.board;
         console.log("try to move");
         console.log(item.position);
         if ("active" in board) {
@@ -34,7 +38,7 @@ function ShogiBoard(boardId) {
 
     this.initBoard = function() {
         var self = this;
-        var board = document.getElementById(this.boardId);
+        var board = this.board;
         var i, j, cell;
 
         for (i = 1; i < 10; i++) {
@@ -43,7 +47,7 @@ function ShogiBoard(boardId) {
                 cell.classList.add("cell");
                 cell.classList.add(`cell${i}${j}`);
                 cell.position = `cell${i}${j}`;
-                cell.onclick = (function (a,b) { return function () { self.moveHandler(a, b); }}) (cell, this.boardId)
+                cell.onclick = (function (a,b) { return function () { self.moveHandler(a, b); }}) (self, cell)
                 board.appendChild(cell);
             }
         }
@@ -58,8 +62,8 @@ function ShogiBoard(boardId) {
         }
     }
 
-    this.activateHandler = function (item, boardId) {
-        var board = document.getElementById(boardId);
+    this.activateHandler = function (self, item) {
+        var board = self.board;
         console.log("pushed");
         console.log(item.position);
         if ("active" in board) {}
@@ -67,7 +71,7 @@ function ShogiBoard(boardId) {
     }
 
     this.initFigures = function() {
-        var board = document.getElementById(this.boardId);
+        var board = this.board;
         var self = this;
 
         var position, i;
@@ -75,7 +79,7 @@ function ShogiBoard(boardId) {
         var pieces = this.sfen.parse("lnsgk2nl/1r4gs1/p1pppp1pp/1p4p2/7P1/2P6/PP1PPPP1P/1SG4R1/LN2KGSNL b Bb");
         for (i = 0; i < pieces.length; i++) {
             var html = pieces[i].toHTML();
-            html.onclick = (function (a,b) { return function () { self.activateHandler(a, b); }}) (html, this.boardId)
+            html.onclick = (function (a,b) { return function () { self.activateHandler(a, b); }}) (self, html)
             board.appendChild(html);
         }
     }

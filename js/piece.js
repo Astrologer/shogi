@@ -13,8 +13,8 @@ names = {
     B: "角",
     r: "飛",
     R: "飛",
-    k: "王",
-    K: "玉"
+    k: "玉",
+    K: "王"
 }
 
 function Piece(type, x, y) {
