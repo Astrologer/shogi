@@ -40,7 +40,7 @@
                 targetImg.src = canvas.toDataURL();
             }
 
-            fetch("/css/pack.css").then(r => r.text()).then(function(textStyle) {
+            fetch("../css/pack.css").then(r => r.text()).then(function(textStyle) {
                 var htmlContent = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"> <foreignObject width="100%" height="100%"> <div xmlns="http://www.w3.org/1999/xhtml"> <style>${textStyle}</style> ${board.board.outerHTML} </div></foreignObject> </svg>`;
                 tempImg.src = 'data:image/svg+xml,' + encodeURIComponent(htmlContent);
                 body.appendChild(targetImg);
