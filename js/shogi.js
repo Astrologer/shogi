@@ -52,6 +52,24 @@ function ShogiBoard(boardId) {
             }
         }
 
+        i = 1;
+        for (j = 1; j < 10; j++) {
+            var cell = document.createElement("div");
+            cell.classList.add(`cell${i}${j}`);
+            cell.innerHTML = 10 - j;
+            cell.classList.add("indexh");
+            board.appendChild(cell);
+        }
+
+        j = 9;
+        for (i = 1; i < 10; i++) {
+            var cell = document.createElement("div");
+            cell.classList.add(`cell${i}${j}`);
+            cell.innerHTML = String.fromCharCode(96 + i);
+            cell.classList.add("indexv");
+            board.appendChild(cell);
+        }
+
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 2; j++) {
                 cell = document.createElement("div");
