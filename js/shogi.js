@@ -16,8 +16,8 @@ function ShogiBoard(boardId) {
 
         for (i = 1; i < 10; i++) {
             for (j = 1; j < 10; j++) {
-                l = 11.06 * (i - 1);
-                t = 11.06 * (j - 1);
+                l = 11.11 * (i - 1);
+                t = 11.11 * (j - 1);
                 rule = `.cell${i}${j} { top: ${l}%; left: ${t}%; }`
                 document.styleSheets[0].insertRule(rule, 0);
             }

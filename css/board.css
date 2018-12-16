@@ -59,7 +59,7 @@
     width: 10.8%;
     height: 10.8%;
    /* background: #aaa; */
-    border: 2px solid black;
+    border: 0.2vmin solid black;
     padding: 0;
 }
 .cell:hover {
@@ -67,14 +67,14 @@
 }
 .dot {
     position: absolute;
-    border-radius: 10px;
+    border-radius: 1vmin;
     width: 1%;
     height: 1%;
     background: #000;
-    border: 2px solid black;
+    border: 0.2vmin solid black;
 }
-.dot00 { top: 32.53%; left: 32.53%; }
-.dot01 { top: 65.76%; left: 32.53%; }
-.dot10 { top: 32.53%; left: 65.76%; }
-.dot11 { top: 65.76%; left: 65.76%; }
+.dot00 { top: 32.66%; left: 32.66%; }
+.dot01 { top: 65.97%; left: 32.66%; }
+.dot10 { top: 32.66%; left: 65.97%; }
+.dot11 { top: 65.97%; left: 65.97%; }
 
