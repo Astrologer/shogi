@@ -12,6 +12,8 @@ function Sfen(value) {
         var pieces = [];
         var parts = value.split(" ");
         var rows = parts[0].split("/");
+        var hands = parts[2].split("");
+
         if (rows.length == 9) {
             for (posx = 1; posx < 10; posx++) {
                 items = rows[posx - 1].split("");
@@ -28,6 +30,9 @@ function Sfen(value) {
                 }
             }
         }
+
+        hands.forEach(p => pieces.push(new Piece(p)));
+
         return pieces;
     }
 }

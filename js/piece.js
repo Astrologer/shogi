@@ -19,19 +19,38 @@ names = {
 
 function Piece(type, x, y) {
     this.name = names[type];
-    this.x = x;
-    this.y = y;
-    this.transform = (type.search(/^[plnsgbrk]$/) >= 0) ? 'rotate(180deg)' : '';
     this._html = document.createElement("div");
-
-    var position = `cell${x}${y}`;
-    this._html.position = position;
-    this._html.classList.add("item");
-    this._html.classList.add(position);
     this._html.innerHTML = this.name;
-    this._html.style.transform = this.transform;
+    this._sub = document.createElement("sub");
+    this.transform = (type.search(/^[plnsgbrk]$/) >= 0) ? 'rotate(180deg)' : '';
+
+    this.isBlack = function() {
+        return (type == type.toUpperCase());
+    }
 
     this.toHTML = function() {
         return this._html;
+    }
+
+    this.isHand = function() {
+        return (this.x === undefined);
+    }
+
+    if (y === undefined) {
+        if (this.isBlack()) {
+            this._html.classList.add("align-right");
+        }
+        this._html.classList.add("captive");
+        this._sub.innerHTML = 2;
+        this._html.appendChild(this._sub);
+    } else {
+        var position = `cell${x}${y}`;
+        this._html.position = position;
+        this._html.classList.add("piece");
+        this._html.classList.add(position);
+        this._html.style.transform = this.transform;
+
+        this.x = x;
+        this.y = y;
     }
 }
