@@ -38,12 +38,9 @@ function ShogiBoard(boardId) {
         this.board = document.createElement("div");
         this.board.classList.add("board");
 
-        this.whiteHands = document.createElement("div");
-        this.whiteHands.classList.add("hand");
-
-        this.blackHands = document.createElement("div");
-        this.blackHands.classList.add("hand");
-        this.blackHands.classList.add("column-reverse");
+        this.hands = new Hands();
+        this.whiteHands = this.hands.getWhiteHands();
+        this.blackHands = this.hands.getBlackHands();
 
         this.boardSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.boardSvg.classList.add("board-svg");
@@ -125,15 +122,11 @@ function ShogiBoard(boardId) {
         var self = this;
         var html = piece.toHTML();
 
-        if (!piece.isHand()) {
+        if (piece.isHand()) {
+            this.hands.addPiece(piece);
+        } else {
             html.onclick = (function (a,b) { return function () { self.activateHandler(a, b); }}) (self, html)
             this.board.appendChild(html);
-        } else {
-            if (piece.isBlack()) {
-                this.blackHands.appendChild(html);
-            } else {
-                this.whiteHands.appendChild(html);
-            }
         }
     }
 

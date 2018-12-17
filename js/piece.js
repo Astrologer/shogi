@@ -19,10 +19,18 @@ names = {
 
 function Piece(type, x, y) {
     this.name = names[type];
+    this.type = type;
     this._html = document.createElement("div");
     this._html.innerHTML = this.name;
     this._sub = document.createElement("sub");
     this.transform = (type.search(/^[plnsgbrk]$/) >= 0) ? 'rotate(180deg)' : '';
+    this.x = x || 0;
+    this.y = y || 0;
+    var position = `cell${this.x}${this.y}`;
+    this._html.position = position;
+    this._html.classList.add("piece");
+    this._html.classList.add(position);
+    this._html.style.transform = this.transform;
 
     this.isBlack = function() {
         return (type == type.toUpperCase());
@@ -33,24 +41,19 @@ function Piece(type, x, y) {
     }
 
     this.isHand = function() {
-        return (this.x === undefined);
+        return (this._html.position == "cell00");
     }
 
-    if (y === undefined) {
-        if (this.isBlack()) {
-            this._html.classList.add("align-right");
-        }
-        this._html.classList.add("captive");
-        this._sub.innerHTML = 2;
-        this._html.appendChild(this._sub);
-    } else {
-        var position = `cell${x}${y}`;
-        this._html.position = position;
-        this._html.classList.add("piece");
-        this._html.classList.add(position);
-        this._html.style.transform = this.transform;
-
-        this.x = x;
-        this.y = y;
+    this.getName = function() {
+        return this.name;
     }
+
+    this.getType = function() {
+        return this.type;
+    }
+
+    this.getBaseType = function() {
+        return this.type;
+    }
+
 }
