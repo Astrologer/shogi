@@ -4,21 +4,16 @@
         <title></title>
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="css/shogi.css" />
-        <script type="text/javascript" src="js/shogi.js?version=4"></script>
-        <script type="text/javascript" src="js/sfen.js?version=4"></script>
-        <script type="text/javascript" src="js/piece.js?version=4"></script>
-        <script type="text/javascript" src="js/hands.js?version=4"></script>
+        <script type="text/javascript" src="js/main.js?version=5"></script>
+        <script type="text/javascript" src="js/args.js?version=5"></script>
+        <script type="text/javascript" src="js/shogi.js?version=5"></script>
+        <script type="text/javascript" src="js/sfen.js?version=5"></script>
+        <script type="text/javascript" src="js/piece.js?version=5"></script>
+        <script type="text/javascript" src="js/hands.js?version=5"></script>
     </head>
     <style></style>
     <body>
         <div id="boardX" ></div>
-
-        <script>
-            var board = new ShogiBoard("boardX");
-            board.initPlayField();
-            board.initCSS();
-            board.initBoard();
-            board.initFigures();
-        </script>
+        <script>createShogiBoard("boardX")</script>
     </body>
 </html>

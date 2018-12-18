@@ -32,6 +32,11 @@
     stroke-width: 0.2%;
 }
 
+.border-line {
+    stroke: rgb(0,0,0);
+    stroke-width: 1%;
+}
+
 .dot {
     stroke: rgb(0,0,0);
     stroke-width: 1%;
@@ -53,6 +58,10 @@
     transition: top 0.5s, left 0.5s;
     font-size: 5vmin;
     text-align: center;
+}
+
+.promoted {
+    color: #e00;
 }
 
 .hand {
@@ -87,18 +96,18 @@
 
 .column-index {
     text-align: center;
-    font-size: 1.8vmin;
+    font-size: 2.3vmin;
     position: absolute;
     width: 10%;
     height: 2%;
-    top: 1.5%;
+    top: 1%;
     padding: 0;
 }
 
 .row-index {
     text-align: right;
-    line-height: 400%;
-    font-size: 2vmin;
+    line-height: 300%;
+    font-size: 2.5vmin;
     position: absolute;
     width: 2%;
     height: 10%;

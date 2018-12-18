@@ -29,6 +29,25 @@ function ShogiBoard(boardId) {
         svg.appendChild(line);
     }
 
+    this.drawBoard = function(svg) {
+        var offset = 5;
+        var len = (100 - 2 * offset) / 9.0;
+        for (i = 0; i < 10; i++) {
+            this.drawLine(svg, offset, 100 - offset, offset + i * len, offset + i * len, "cell-line");
+            this.drawLine(svg, offset + i * len, offset + i * len, offset, 100 - offset, "cell-line");
+        }
+
+        for (i = 1; i < 3; i++) {
+            this.drawLine(svg, offset + len * 3 * i, offset + len * 3 * i, offset + len * 6, offset + len * 6, "dot");
+            this.drawLine(svg, offset + len * 3 * i, offset + len * 3 * i, offset + len * 3, offset + len * 3, "dot");
+        }
+
+        this.drawLine(svg, 0, 0, 0, 100, "border-line");
+        this.drawLine(svg, 0, 100, 0, 0, "border-line");
+        this.drawLine(svg, 100, 0, 100, 100, "border-line");
+        this.drawLine(svg, 100, 100, 100, 0, "border-line");
+    }
+
     this.initPlayField = function() {
         var i;
 
@@ -44,18 +63,7 @@ function ShogiBoard(boardId) {
 
         this.boardSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.boardSvg.classList.add("board-svg");
-
-        var offset = 5;
-        var len = (100 - 2 * offset) / 9.0;
-        for (i = 0; i < 10; i++) {
-            this.drawLine(this.boardSvg, offset, 100 - offset, offset + i * len, offset + i * len, "cell-line");
-            this.drawLine(this.boardSvg, offset + i * len, offset + i * len, offset, 100 - offset, "cell-line");
-        }
-
-        for (i = 1; i < 3; i++) {
-            this.drawLine(this.boardSvg, offset + len * 3 * i, offset + len * 3 * i, offset + len * 6, offset + len * 6, "dot");
-            this.drawLine(this.boardSvg, offset + len * 3 * i, offset + len * 3 * i, offset + len * 3, offset + len * 3, "dot");
-        }
+        this.drawBoard(this.boardSvg);
 
         this.table.appendChild(this.whiteHands);
         this.table.appendChild(this.board);
@@ -130,10 +138,10 @@ function ShogiBoard(boardId) {
         }
     }
 
-    this.initFigures = function() {
+    this.initFigures = function(sfen) {
         var position, i;
 
-        var pieces = this.sfen.parse("lnsgk2nl/1r4gs1/p1pppp1pp/1p4p2/7P1/2P6/PP1PPPP1P/1SG4R1/LN2KGSNL b Bb");
+        var pieces = this.sfen.parse(sfen);
         for (i = 0; i < pieces.length; i++) {
             this.addPiece(pieces[i]);
         }
