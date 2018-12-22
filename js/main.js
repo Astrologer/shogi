@@ -14,7 +14,7 @@ function createShogiBoard(boardId) {
     board.initBoard();
     board.initFigures(args.sfen);
 
-    if ('title' in args) {
+    if (args.title !== undefined) {
         document.title = titles[args.title] || args.title;
     }
     return board;
