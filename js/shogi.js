@@ -48,7 +48,12 @@ function ShogiBoard(boardId) {
         this.drawLine(svg, 100, 100, 100, 0, "border-line");
     }
 
+    this.handsClick = function(self, piece) {
+        self.active = piece;
+    }
+
     this.initPlayField = function() {
+        var self = this;
         var i;
 
         this.table = (this.boardId === undefined) ? document.createElement("div") : document.getElementById(boardId);
@@ -58,6 +63,7 @@ function ShogiBoard(boardId) {
         this.board.classList.add("board");
 
         this.hands = new Hands();
+        this.hands.onclick = function(piece) { self.handsClick(self, piece); };
         this.whiteHands = this.hands.getWhiteHands();
         this.blackHands = this.hands.getBlackHands();
 
@@ -71,15 +77,13 @@ function ShogiBoard(boardId) {
         this.board.appendChild(this.boardSvg);
     }
 
-    this.moveHandler = function(self, item) {
-        var board = self.board;
-        console.log("try to move");
-        console.log(item.position);
-        if ("active" in board) {
-            console.log( board.active.position);
-            board.active.classList.replace(board.active.position, item.position);
-            board.active.position = item.position;
-            delete board.active;
+    this.moveHandler = function(self, cell) {
+        if ("active" in self) {
+            if (self.active.isHand()) {
+                self.active = self.hands.popItem(self.active);
+            }
+            self.active.setPosition(cell.position);
+            delete self.active;
         }
     }
 
@@ -118,12 +122,22 @@ function ShogiBoard(boardId) {
         }
     }
 
-    this.activateHandler = function (self, item) {
-        var board = self.board;
-        console.log("pushed");
-        console.log(item.position);
-        if ("active" in board) {}
-        else board.active = item
+    this.activateHandler = function (self, piece) {
+        if ("active" in self) {
+            if (self.active.isHand()) {
+                self.active = piece;
+            } else if (piece == self.active) {
+                self.active.togglePromotion();
+                delete self.active;
+            } else if (piece.isBlack() == self.active.isBlack()) {
+                self.active = piece;
+            } else {
+                self.active.setPosition(piece.position);
+                piece.capture();
+                self.hands.addPiece(piece);
+                delete self.active;
+            }
+        } else self.active = piece;
     }
 
     this.addPiece = function(piece) {
@@ -132,10 +146,10 @@ function ShogiBoard(boardId) {
 
         if (piece.isHand()) {
             this.hands.addPiece(piece);
-        } else {
-            html.onclick = (function (a,b) { return function () { self.activateHandler(a, b); }}) (self, html)
-            this.board.appendChild(html);
         }
+
+        html.onclick = (function (a,b) { return function () { self.activateHandler(a, b); }}) (self, piece)
+        this.board.appendChild(html);
     }
 
     this.initFigures = function(sfen) {

@@ -10,6 +10,9 @@ function Hands() {
     this.blackHands.classList.add("align-right");
     this._blackIndex = {};
 
+    this.onclick = function(piece) {
+    }
+
     this.getBlackHands = function() {
         return this.blackHands;
     }
@@ -18,10 +21,25 @@ function Hands() {
         return this.whiteHands;
     }
 
+    this.popItem = function(piece) {
+        var index = ((piece.isBlack()) ? this._blackIndex : this._whiteIndex)[piece.getType()];
+
+        var piece = index['pieces'].pop();
+        index['count']--;
+        index['ind'].innerHTML = index['count'];
+
+        if (index['count'] == 0) {
+            index.item.parentNode.removeChild(index.item);
+        }
+
+        return piece;
+    }
+
     this._addItem = function(piece, index, hands) {
+        var self = this;
         var type = piece.getBaseType();
 
-        if (type in index) {
+        if (type in index && index[type]['count'] > 0) {
             item = index[type];
             item['count']++;
             item['pieces'].push(piece);
@@ -34,7 +52,6 @@ function Hands() {
             if (piece.isBlack()) item.classList.add("align-right");
             item.innerHTML = piece.getName();
             item.appendChild(sub);
-
             sub.innerHTML = 1;
 
             index[type] = {
@@ -44,6 +61,7 @@ function Hands() {
                 item: item
             }
 
+            item.onclick = (function(i) { return function() { self.onclick(i.pieces[0]); }}) (index[type]);
             hands.appendChild(item);
         }
     }

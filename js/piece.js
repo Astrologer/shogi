@@ -37,10 +37,12 @@ names = {
 }
 
 function Piece(type, x, y) {
-    this.name = names[type];
-    this.type = type;
+    this.type = type.replace("x", "");
+    this.promoted = type.replace(/[^x]/g, "");
+
+    this._hand = "cell00";
     this._html = document.createElement("div");
-    this._html.innerHTML = this.name;
+    this._html.innerHTML = names[this.promoted + this.type];
     this._sub = document.createElement("sub");
     this.transform = (type.search(/^x?[plnsgbrk]$/) >= 0) ? 'rotate(180deg)' : '';
     if (type.search(/^x/) == 0) {
@@ -48,14 +50,22 @@ function Piece(type, x, y) {
     }
     this.x = x || 0;
     this.y = y || 0;
-    var position = `cell${this.x}${this.y}`;
-    this._html.position = position;
+    this.position = `cell${this.x}${this.y}`;
     this._html.classList.add("piece");
-    this._html.classList.add(position);
+    this._html.classList.add(this.position);
     this._html.style.transform = this.transform;
 
+    this.getPosition = function() {
+        return this.position;
+    }
+
+    this.setPosition = function(position) {
+        this._html.classList.replace(this.position, position);
+        this.position = position;
+    }
+
     this.isBlack = function() {
-        return (type == type.toUpperCase());
+        return (this.type == this.type.toUpperCase());
     }
 
     this.toHTML = function() {
@@ -63,11 +73,11 @@ function Piece(type, x, y) {
     }
 
     this.isHand = function() {
-        return (this._html.position == "cell00");
+        return (this.position == this._hand);
     }
 
     this.getName = function() {
-        return this.name;
+        return names[this.promoted + this.type];
     }
 
     this.getType = function() {
@@ -78,4 +88,47 @@ function Piece(type, x, y) {
         return this.type;
     }
 
+    this.isPromoted = function() {
+        return this.promoted == "x";
+    }
+
+    this.ableToPromote = function() {
+        return "kg".indexOf(this.type.toLowerCase()) == -1;
+    }
+
+    this.setPromoted = function(promote) {
+        if (!this.ableToPromote()) {
+            return;
+        }
+
+        if (promote) {
+            this._html.classList.add("promoted");
+            this.promoted = "x";
+            this._html.innerHTML = this.getName();
+        } else {
+            this._html.classList.remove("promoted");
+            this.promoted = "";
+            this._html.innerHTML = this.getName();
+        }
+    }
+
+    this.togglePromotion = function() {
+        this.setPromoted(!this.isPromoted());
+    }
+
+    this.capture = function() {
+        this.promoted = "";
+        this._html.classList.remove("promoted");
+        if (this.isBlack()) {
+            this.type = this.type.toLowerCase();
+            this.transform = 'rotate(180deg)';
+        } else {
+            this.type = this.type.toUpperCase();
+            this.transform = '';
+        }
+        this._html.style.transform = this.transform;
+        this._html.innerHTML = this.getName();
+        this._html.classList.replace(this.position, this._hand);
+        this.position = this._hand;
+    }
 }
