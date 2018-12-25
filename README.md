@@ -1,4 +1,4 @@
-ogi Board
+# Shogi Board
 Simple and minimalistic shogi board. Main purpose is to share tsume and assist a bit during solving.
 
 ![Screenshot](images/screenshot.png)
